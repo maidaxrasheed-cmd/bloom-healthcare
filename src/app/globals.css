@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #faf7f2;
+  --bone: #f5f0e8;
+  --ink: #1a1f1a;
+  --sage-500: #5a7c56;
+  --sage-700: #384f37;
+}
+
+html {
+  /* Fluid base font: 16px on mobile → 18px on desktop */
+  font-size: clamp(16px, 1.1vw + 12px, 18px);
+}
+
+html, body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv01";
+}
+
+/* ── Fluid typography scale ───────────────────────────────────
+   All sizes scale smoothly between a min (mobile) and max (desktop).
+   Use these classes instead of Tailwind's static text-* where you
+   want responsive scaling.
+──────────────────────────────────────────────────────────── */
+
+/* Labels, captions, badges  (12px → 13px) */
+.ft-xs   { font-size: clamp(0.75rem, 0.6vw + 0.6rem, 0.8125rem); }
+
+/* Body small / table cells  (13px → 15px) */
+.ft-sm   { font-size: clamp(0.8125rem, 0.5vw + 0.7rem, 0.9375rem); }
+
+/* Body default              (15px → 17px) */
+.ft-base { font-size: clamp(0.9375rem, 0.5vw + 0.8rem, 1.0625rem); }
+
+/* Subheadings               (17px → 20px) */
+.ft-lg   { font-size: clamp(1.0625rem, 0.8vw + 0.85rem, 1.25rem); }
+
+/* Section headings          (20px → 26px) */
+.ft-xl   { font-size: clamp(1.25rem, 1.2vw + 0.9rem, 1.625rem); }
+
+/* Page headings             (26px → 36px) */
+.ft-2xl  { font-size: clamp(1.625rem, 2vw + 1rem, 2.25rem); }
+
+/* Hero / display            (32px → 52px) */
+.ft-3xl  { font-size: clamp(2rem, 3.5vw + 1rem, 3.25rem); }
+
+/* Stat card numbers         (30px → 44px) */
+.ft-stat { font-size: clamp(1.875rem, 2.5vw + 1rem, 2.75rem); }
+
+.font-display {
+  font-family: 'Fraunces', Georgia, serif;
+  font-feature-settings: "ss01";
+  letter-spacing: -0.02em;
+}
+
+/* Noise texture overlay for warmth */
+.noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.6;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #cdd9cb;
+  border-radius: 10px;
+  border: 2px solid var(--cream);
+}
+::-webkit-scrollbar-thumb:hover { background: #a8bda4; }
+
+/* Smooth focus rings */
+*:focus-visible {
+  outline: 2px solid var(--sage-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reveal animation */
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  animation: reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+.pulse-dot { animation: pulse-dot 2s infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(90,124,86,0.08), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Button hover lift */
+.btn-lift {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+}
+.btn-lift:hover { transform: translateY(-1px); }
+.btn-lift:active { transform: translateY(0); }
+
+/* Decorative leaf icon used in logo */
+.leaf-mark {
+  width: 28px; height: 28px;
+  background: var(--sage-700);
+  border-radius: 50% 0 50% 50%;
+  transform: rotate(-45deg);
+  position: relative;
+  flex-shrink: 0;
+}
+.leaf-mark::after {
+  content: '';
+  position: absolute;
+  top: 4px; left: 50%;
+  width: 1.5px; height: 14px;
+  background: var(--cream);
+  transform: translateX(-50%);
+}
