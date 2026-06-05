@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/Logo';
 import { getSession, getClinic, updateClinic, type Service, type Channel, type Clinic, DEFAULT_TEMPLATES } from '@/lib/store';
-import { Check, ArrowRight, ArrowLeft, Plus, Trash2, Instagram, MessageCircle, Globe, Mail, Facebook, Copy } from 'lucide-react';
+import { Check, ArrowRight, ArrowLeft, Plus, Trash2, Instagram, MessageCircle, MessageSquare, Globe, Mail, Facebook, Copy } from 'lucide-react';
 
 const STEPS = ['Hours', 'Services', 'Channels', 'Reminders'];
 
@@ -21,6 +21,7 @@ export default function OnboardingPage() {
   const [channels, setChannels] = useState<{ channel: Channel; connected: boolean; handle?: string }[]>([
     { channel: 'website', connected: true },
     { channel: 'whatsapp', connected: false },
+    { channel: 'sms', connected: false },
     { channel: 'instagram', connected: false },
     { channel: 'facebook', connected: false },
     { channel: 'email', connected: false },
@@ -203,7 +204,7 @@ export default function OnboardingPage() {
 }
 
 function ChannelRow({ ch, onToggle, onHandle }: { ch: { channel: Channel; connected: boolean; handle?: string }; onToggle: () => void; onHandle: (v: string) => void }) {
-  const Icon = ch.channel === 'instagram' ? Instagram : ch.channel === 'whatsapp' ? MessageCircle : ch.channel === 'facebook' ? Facebook : ch.channel === 'email' ? Mail : Globe;
+  const Icon = ch.channel === 'instagram' ? Instagram : ch.channel === 'sms' ? MessageSquare : ch.channel === 'whatsapp' ? MessageCircle : ch.channel === 'facebook' ? Facebook : ch.channel === 'email' ? Mail : Globe;
   const label = ch.channel === 'website' ? 'Your website' : ch.channel.charAt(0).toUpperCase() + ch.channel.slice(1);
   return (
     <div className="bg-bone border border-sage-200 rounded-lg p-4">
