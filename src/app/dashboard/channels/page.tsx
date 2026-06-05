@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { getSession, getClinic, updateClinic, type Clinic, type Channel } from '@/lib/store';
-import { Instagram, MessageCircle, Globe, Mail, Facebook, Copy, Check, ExternalLink, Play, Clock } from 'lucide-react';
+import { Instagram, MessageCircle, MessageSquare, Globe, Mail, Facebook, Copy, Check, ExternalLink, Play, Clock } from 'lucide-react';
 
 const channelMeta = {
   website: {
@@ -14,6 +14,11 @@ const channelMeta = {
   whatsapp: {
     icon: MessageCircle, name: 'WhatsApp', color: 'green',
     description: 'Patients message your WhatsApp number — bot handles booking.',
+    status: 'soon',
+  },
+  sms: {
+    icon: MessageSquare, name: 'SMS', color: 'purple',
+    description: 'Send appointment reminders and confirmations via text message. Works on any phone, no internet needed.',
     status: 'soon',
   },
   instagram: {
@@ -59,6 +64,15 @@ export default function ChannelsPage() {
     setCopied(key); setTimeout(() => setCopied(null), 1500);
   };
 
+  // Ensure SMS appears in list even for existing clinics that don't have it yet
+  const channels = clinic.channels.some(c => c.channel === 'sms')
+    ? clinic.channels
+    : [
+        ...clinic.channels.slice(0, clinic.channels.findIndex(c => c.channel === 'instagram')),
+        { channel: 'sms' as Channel, connected: false },
+        ...clinic.channels.slice(clinic.channels.findIndex(c => c.channel === 'instagram')),
+      ];
+
   return (
     <DashboardLayout>
       <div className="p-8 md:p-12 max-w-5xl mx-auto w-full">
@@ -99,8 +113,8 @@ export default function ChannelsPage() {
 
         {/* Channel grid */}
         <div className="grid md:grid-cols-2 gap-4">
-          {clinic.channels.map(ch => {
-            const meta = channelMeta[ch.channel];
+          {channels.map(ch => {
+            const meta = channelMeta[ch.channel as keyof typeof channelMeta];
             if (!meta) return null;
             const Icon = meta.icon;
             return (
@@ -131,7 +145,7 @@ export default function ChannelsPage() {
                       <Play className="w-3 h-3" /> Watch 60s demo
                     </button>
                   ) : <span />}
-                  <button onClick={() => toggle(ch.channel)}
+                  <button onClick={() => toggle(ch.channel as Channel)}
                     className={`relative w-11 h-6 rounded-full transition ${ch.connected ? 'bg-sage-700' : 'bg-sage-200'}`}>
                     <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-cream transition ${ch.connected ? 'left-[22px]' : 'left-0.5'}`} />
                   </button>
@@ -145,7 +159,7 @@ export default function ChannelsPage() {
           <Clock className="w-5 h-5 text-sage-700 mt-0.5" />
           <div>
             <h3 className="font-display ft-lg mb-1">Bot channels are rolling out</h3>
-            <p className="ft-base text-ink/65">Instagram, Facebook, WhatsApp, and email parsing all require Meta App Review or business API setup (1–4 weeks). Toggle them on now to be in the early-access queue.</p>
+            <p className="ft-base text-ink/65">Instagram, Facebook, WhatsApp, SMS, and email parsing all require API setup (1–4 weeks). Toggle them on now to be in the early-access queue.</p>
           </div>
         </div>
       </div>
